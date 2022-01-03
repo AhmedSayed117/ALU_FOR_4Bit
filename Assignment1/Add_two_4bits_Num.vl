@@ -1,0 +1,36 @@
+module fullAdder(S, Cout, A, B, Cin);
+   output S;
+   output Cout;
+   input  A;
+   input  B;
+   input  Cin;
+   
+   wire   w0;
+   wire   w1;
+   wire   w2;
+   wire   w3;
+   
+   xor(w0, A, B);
+   xor(S, Cin, w0);
+   and(w1, A, B);   
+   and(w2, A, Cin);
+   and(w3, B, Cin);   
+   or(Cout, w1, w2, w3);
+endmodule
+
+
+module 4bit_adder(a,b,in,out,s);
+    input [3:0] a;
+    input [3:0] b;
+    wire in;
+    assign in=0;
+    output [3:0] s;
+    output out;
+    wire [3:1]c;
+
+    fulladder f0(a[0],b[0],in,c[1],s[0]);
+    fulladder f1(a[1],b[1],c[1],c[2],s[1]);
+    fulladder f2(a[2],b[2],c[2],c[3],s[2]);
+    fulladder f3(a[3],b[3],c[3],out,s[3]);
+endmodule 
+

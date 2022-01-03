@@ -1,0 +1,2 @@
+g++ -O3 -o assign_encoder.exe assign_encoder.cpp
+assign_encoder.exe ./ALU.vl 1 5 20190034 20190009 20190186 20190249 20190730

@@ -1,0 +1,55 @@
+module fullAdder(S, Cout, A, B, Cin);
+   output S;
+   output Cout;
+   input  A;
+   input  B;
+   input  Cin;
+   
+   wire   w0;
+   wire   w1;
+   wire   w2;
+   wire   w3;
+   
+   xor(w0, A, B);
+   xor(S, Cin, w0);
+   and(w1, A, B);   
+   and(w2, A, Cin);
+   and(w3, B, Cin);   
+   or(Cout, w1, w2, w3);
+endmodule
+
+module Sub_two_4bits_Num(S, C, cout, A,B);
+
+   output [3:0] S;   // The 4-bit output
+   output 	C;   // The 1-bit carry/borrow status. /must = 1 to perform subtraction 
+   output 	cout;   // The 1-bit for the overflow condition . 
+   input [3:0] 	A;   // The 4-bit input.
+   input [3:0] 	B;   // The 4-bit input , we will get its complement by xor it with 1.
+  
+   wire    cin;  // if it = 0 then we add if it = 1 we substract . 
+   assign cin =1; 
+   wire 	C0; // The carry out .
+   wire 	C1; // The carry out .
+   wire 	C2; // The carry out .
+   wire 	C3; // The carry out . we use it to know if threre is a carry 
+   
+   wire 	B0; // the result of the xor (the B complement in subtraction case)
+   wire 	B1; //  the result of the xor (the B complement in subtraction case)
+   wire 	B2; //  the result of the xor (the B complement in subtraction case)
+   wire 	B3; //  the result of the xor (the B complement in subtraction case)
+
+   xor(B0, B[0], cin);
+   xor(B1, B[1], cin);
+   xor(B2, B[2], cin);
+   xor(B3, B[3], cin);
+   xor(C, C3, cin);    //Carry does not equals C3 for subtraction.
+   xor(cout, C3, C2);     
+
+   fullAdder f0(S[0], C0, A[0], B0, Op);  
+   fullAdder f1(S[1], C1, A[1], B1, C0);
+   fullAdder f2(S[2], C2, A[2], B2, C1);
+   fullAdder f3(S[3], C3, A[3], B3, C2);   
+
+endmodule
+
+

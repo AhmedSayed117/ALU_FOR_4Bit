@@ -1,0 +1,100 @@
+// Install the file: iverilog-10.0-x86_setup.exe from: bleyer.org/icarus/
+// Add the path C:\iverilog\bin to the PATH environment variable
+// Go the folder containing counter.vl, then execute the following commands from the command prompt:
+// iverilog -o Add_4bitNum_ByOne Add_4bitNum_ByOne.vl
+// vvp Add_4bitNum_ByOne
+
+module fullAdder(S, Cout, A, B, Cin);
+   output S;
+   output Cout;
+   input  A;
+   input  B;
+   input  Cin;
+   
+   wire   w0;
+   wire   w1;
+   wire   w2;
+   wire   w3;
+   
+   xor(w0, A, B);
+   xor(S, Cin, w0);
+   and(w1, A, B);   
+   and(w2, A, Cin);
+   and(w3, B, Cin);   
+   or(Cout, w1, w2, w3);
+
+   initial
+    begin
+        $monitor("S=%b , Cout=%b",S,Cout);
+    end
+
+endmodule
+
+module Multi_2x1(out,a,b,s);
+      input a,b,s;
+      wire and_1,and_2,s_c;
+      output out;
+      not (s_c,s);
+      and (and_1,a,s_c);
+      and (and_2,b,s);
+      or (out,and_1,and_2);
+
+      initial
+      begin
+         $monitor("Out=%b",out);
+      end
+
+  
+
+endmodule
+
+module Multi_4x1(out,i0,i1,i2,i3,s1,s0);
+      input i0,i1,i2,i3,s1,s0;
+      output out;
+      wire mux1,mux2;
+
+      Multi_2x1 Multi_1(mux1,i0,i1,s1);
+      Multi_2x1 Multi_2(mux2,i2,i3,s1);
+      Multi_2x1 Multi_3(out,mux1,mux2,s0);
+
+    initial
+    begin
+        $monitor("Out=%b",out);
+    end
+
+endmodule
+
+
+
+
+
+module add_4bitNum_ByOne(S,Out,A);
+
+   output 	Out;   
+   output [3:0] S;   
+   input [3:0] 	A;  
+   wire cin;  
+   assign cin =1; 
+   wire y; 
+   assign y =0; 
+   wire 	C0; 
+   wire 	C1;
+   wire 	C2; 
+   wire 	C3;
+
+   fullAdder f0(S[0], C0, A[0], y, cin);  
+   fullAdder f1(S[1], C1, A[1], y, cin);
+   fullAdder f2(S[2], C2, A[2], y, cin);
+   fullAdder f3(S[3], C3, A[3], y, cin);   
+
+endmodule
+
+
+module main();
+      wire i0 ,i1,i2,i3,s1,s0;
+      assign  i0 = 1,i1 = 0,i2 = 0,i3 = 0,s1 = 1,s0 = 0;
+      output out;
+
+      Multi_4x1 m1(out,i0,i1,i2,i3,s1,s0);     
+    
+endmodule

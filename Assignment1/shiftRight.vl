@@ -1,0 +1,48 @@
+// Install the file: iverilog-10.0-x86_setup.exe from: bleyer.org/icarus/
+// Add the path C:\iverilog\bin to the PATH environment variable
+// Go the folder containing counter.vl, then execute the following commands from the command prompt:
+// iverilog -o shiftRight shiftRight.vl
+// vvp shiftRight
+//shiftRight the LSB will Discard.
+
+module shiftRight(output [3:0] out,input [3:0] in);
+            
+    // generate
+    // genvar i;
+
+    // for(i=0;i<=2;i=i+1)
+    //     begin  
+    //         assign out[i]=in[i+1];
+    //     end
+    // endgenerate
+    //     assign out[3]=in[3];
+
+    assign out[0] = in[1];
+    assign out[1] = in[2];
+    assign out[2] = in[3];
+    assign out[3] = in[3];
+
+endmodule
+
+module shift_right_test(input wire[3:0]in);
+    wire [3:0] out;
+    shiftRight obj(out,in);
+    initial
+    begin
+        $monitor("out =%b",out);
+    end
+endmodule
+
+module main();
+
+        //in is the number have 4 bit (1010).
+        wire [3:0] in =4'b0111;
+        /*
+        another way to input
+        assign in[0]=0;
+        assign in[1]=0;
+        assign in[2]=1;
+        assign in[3]=0;*/
+        shift_right_test shiftTest(in);
+    
+endmodule

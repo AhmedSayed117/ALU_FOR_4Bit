@@ -1,0 +1,48 @@
+// Install the file: iverilog-10.0-x86_setup.exe from: bleyer.org/icarus/
+// Add the path C:\iverilog\bin to the PATH environment variable
+// Go the folder containing counter.vl, then execute the following commands from the command prompt:
+// iverilog -o Sub_4bitNum_ByOne Sub_4bitNum_ByOne.vl
+// vvp Sub_4bitNum_ByOne
+//shiftRight the LSB will Discard.
+
+
+module fullAdder(S, Cout, A, B, Cin);
+   output S;
+   output Cout;
+   input  A;
+   input  B;
+   input  Cin;
+   
+   wire   w0;
+   wire   w1;
+   wire   w2;
+   wire   w3;
+   
+   xor(w0, A, B);
+   xor(S, Cin, w0);
+   and(w1, A, B);   
+   and(w2, A, Cin);
+   and(w3, B, Cin);   
+   or(Cout, w1, w2, w3);
+endmodule
+
+module Sub_4bitNum_ByOne(S,Out,A);
+
+   output 	Out;   // The 1-bit carry/borrow status. /must = 1 to perform subtraction 
+   output [3:0] S;   // The 4-bit output
+   input [3:0] 	A;   // The 4-bit input.
+   wire cin;  
+   assign cin =0; 
+   wire y; 
+   assign y =1; 
+   wire 	C0; // The carry out .
+   wire 	C1; // The carry out .
+   wire 	C2; // The carry out .
+   wire 	C3; // The carry out . we use it to know if threre is a carry 
+
+   fullAdder f0(S[0], C0, A[0], y, cin);  
+   fullAdder f1(S[1], C1, A[1], y, cin);
+   fullAdder f2(S[2], C2, A[2], y, cin);
+   fullAdder f3(S[3], C3, A[3], y, cin);   
+
+endmodule
